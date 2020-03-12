@@ -1,2 +1,2 @@
-# admin-dashboard
-git repo containing new admin dashboard
+# panzer-dashboard
+git repo containing panzer admin dashboard
