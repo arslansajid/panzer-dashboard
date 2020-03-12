@@ -69,7 +69,7 @@
   },
   "scripts": {
     "dev": "webpack -d --progress --watch --profile --env.dev",
-    "start": "node server.js",
+    "start": "npm run build && node server.js",
     "build": "webpack -p --progress --env.prod",
     "clean": "rimraf ./build",
     "deploy": "npm run build && npm start",
