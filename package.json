@@ -1,11 +1,9 @@
 {
-  "name": "waffle-world-admin",
+  "name": "panzer-dashboard",
   "version": "0.0.1",
   "description": "Admin Dashboard for Panzer Dashboard",
   "author": "Arslan Sajid",
-  "homepage": "http://waffleworld.com",
-  "copyright": "Copyright 2020 waffleworld.com",
-  "private": true,
+  "private": false,
   "dependencies": {
     "axios": "^0.15.3",
     "babel-core": "6.26.0",
@@ -69,7 +67,7 @@
   },
   "scripts": {
     "dev": "webpack -d --progress --watch --profile --env.dev",
-    "start": "npm run build && node server.js",
+    "start": "node server.js",
     "build": "webpack -p --progress --env.prod",
     "clean": "rimraf ./build",
     "deploy": "npm run build && npm start",
