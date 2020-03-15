@@ -146,6 +146,7 @@ export default class Exercise extends React.Component {
                   <th>Timer_type</th>
                   <th>Duration</th>
                   <th>Rest Duration</th>
+                  <th>Total Days</th>
                   <th>Video Urls</th>
                 </tr>
               </thead>

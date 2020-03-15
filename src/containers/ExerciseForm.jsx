@@ -29,6 +29,7 @@ export default class ExerciseForm extends React.Component {
       city: '',
       exerciseId: '',
       profile_picture: '',
+      videoInputCount: 1,
       description: RichTextEditor.createEmptyValue(),
     };
     // this.rteState = RichTextEditor.createEmptyValue();
@@ -79,12 +80,24 @@ export default class ExerciseForm extends React.Component {
     this.setState({ exercise });
   }
 
+  handleVideoURLChange = (event, index) => {
+    const { value, name } = event.target;
+
+    const { exercise } = this.state;
+    exercise[name][index] = value;
+    this.setState({ exercise });
+  }
+
   postExercise(event) {
     event.preventDefault();
     const { match, history } = this.props;
     const { loading, exercise } = this.state;
     if (!loading) {
-
+      let urlObject = {};
+       exercise.video_urls.forEach((url,index) => {
+        urlObject =  Object.assign(urlObject, {[index] : url})
+      })
+      exercise.video_urls = urlObject;
       this.setState({ loading: true });
       if (match.params.exerciseId) {
         axios.put(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`, exercise)
@@ -135,6 +148,7 @@ export default class ExerciseForm extends React.Component {
       description,
       city,
       cities,
+      videoInputCount
     } = this.state;
 
     return (
@@ -289,6 +303,42 @@ export default class ExerciseForm extends React.Component {
                           value={exercise.rest_duration}
                           onChange={this.handleInputChange}
                         />
+                      </div>
+                    </div>
+
+                  {[...Array(videoInputCount)].map((count, index) => {
+                    return (
+                      <div className="form-group row" key={index}>
+                      <label
+                        className="control-label col-md-3 col-sm-3"
+                      >Video URL
+                      </label>
+                      <div className="col-md-6 col-sm-6">
+                        <input
+                          // required
+                          type="text"
+                          name="video_urls"
+                          className="form-control"
+                          value={exercise.video_urls[index]}
+                          onChange={(event) => this.handleVideoURLChange(event, index)}
+                        />
+                      </div>
+                    </div>
+                    )
+                  })}
+                    
+                    <div className="form-group row">
+                      <label
+                        className="control-label col-md-3 col-sm-3"
+                      >
+                      </label>
+                      <div className="col-md-6 col-sm-6 text-right">
+                        <Button className={`btn btn-info btn-md mr-1`} onClick={() => this.setState({ videoInputCount: videoInputCount + 1})}>
+                          Add more
+                        </Button>
+                        <Button className={`btn btn-danger btn-md`} onClick={() => {exercise.video_urls.pop(); this.setState({exercise, videoInputCount: videoInputCount - 1})} } disabled={videoInputCount === 1}>
+                          Remove
+                        </Button>
                       </div>
                     </div>
 
