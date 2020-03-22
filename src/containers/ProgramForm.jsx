@@ -18,7 +18,7 @@ export default class ProgramForm extends React.Component {
         total_weeks: 0,
         exercise_ids: [],
       },
-      selectedExercises: [],
+      selectedExercises: null,
       exercises: [],
     };
     // this.rteState = RichTextEditor.createEmptyValue();
@@ -30,17 +30,21 @@ export default class ProgramForm extends React.Component {
   componentDidMount() {
     console.log('props', this.props);
     const { match } = this.props;
-    if (match.params.programId && match.url.indexOf("exercises") < 0) {
-      axios.get(`${API_END_POINT}/api/categories/one`, { params: { "programId": match.params.programId } })
+    if (match.params.programId /* && match.url.indexOf("exercises") < 0 */) {
+      axios.get(`${API_END_POINT}/api/v1/program/${match.params.programId}`)
         .then((response) => {
           this.setState({
-            program: response.data.object[0],
-            // description: RichTextEditor.createValueFromString(response.data[0].description, 'html'),
+            program: response.data.program,
+          }, () => {
+            if(match.url.indexOf("exercises") > 0 ) {
+              this.fetchExercises();
+            }
           });
         });
-    } else {
-      this.fetchExercises();
     }
+    // else {
+    //   this.fetchExercises();
+    // }
   }
 
   fetchExercises = () => {
@@ -51,7 +55,7 @@ export default class ProgramForm extends React.Component {
       })
     })
     .catch(() => {
-      window.alert("ERROR FETCHING EXERCISES !")
+      window.alert("ERROR FETCHING EXERCISES ...")
     })
   }
 
@@ -72,12 +76,6 @@ export default class ProgramForm extends React.Component {
     this.setState({ program });
   }
 
-  // handleFile = (event) => {
-  //   this.setState({
-  //     files: event.target.files.length ? event.target.files[0] : '',
-  //   });
-  // }
-
   setExercise(selectedExercise) {
     this.setState(prevState => ({
       exercise: selectedExercise,
@@ -87,10 +85,6 @@ export default class ProgramForm extends React.Component {
       },
     }))
   }
-
-  // handleImages = (event) => {
-  //   this.setState({ gallery: event.target.files });
-  // }
 
   handleImages = (event) => {
     const { name } = event.target;
@@ -111,30 +105,30 @@ export default class ProgramForm extends React.Component {
         axios.put(`${API_END_POINT}/api/v1/program`, program)
           .then((response) => {
             if (response.data && response.status === 200) {
-              window.alert(response.data.message);
+              window.alert(response.data.program);
               this.setState({ loading: false });
             } else {
-              window.alert('ERROR UPDATING !');
+              window.alert(response.data.program);
               this.setState({ loading: false });
             }
           })
           .catch((err) => {
-            window.alert('ERROR UPDATING !');
+            window.alert('ERROR UPDATING ...');
             this.setState({ loading: false });
           })
       } else {
         axios.post(`${API_END_POINT}/api/v1/program`, program)
           .then((response) => {
             if (response.data && response.status === 200) {
-              window.alert(response.data.message);
+              window.alert(response.data.program);
               this.setState({ loading: false });
             } else {
-              window.alert('ERROR SAVING !')
+              window.alert(response.data.program)
               this.setState({ loading: false });
             }
           })
           .catch((err) => {
-            window.alert('ERROR SAVING !')
+            window.alert('ERROR SAVING ...')
             this.setState({ loading: false });
           })
       }
@@ -144,39 +138,37 @@ export default class ProgramForm extends React.Component {
   postExercise = (event) => {
     event.preventDefault();
     const { program, selectedExercises } = this.state;
-    selectedExercises.split(',').forEach((exercise, index) => {
-      program.exercise_ids[index] = exercise;
-    })
-    console.log("prog", program);
-    axios.put(`${API_END_POINT}/api/v1/program/update_exercises`, program)
-    .then((response) => {
-      if (response.data && response.status === 200) {
-        window.alert(response.data.message);
+    if(!!selectedExercises) {
+      program.exercise_ids = [];
+      selectedExercises.split(',').forEach((exercise, index) => {
+        program.exercise_ids[index] = exercise;
+      })
+      console.log("prog", program);
+      axios.put(`${API_END_POINT}/api/v1/program/update_exercises`, program)
+      .then((response) => {
+        if (response.data && response.status === 200) {
+          window.alert("SAVED ...");
+          this.setState({ loading: false });
+        } else {
+          window.alert('ERROR ADDING EXERCISE ...');
+          this.setState({ loading: false });
+        }
+      })
+      .catch((err) => {
+        window.alert('ERROR ADDING EXERCISE ...');
         this.setState({ loading: false });
-      } else {
-        window.alert('ERROR ADDING EXERCISE !');
-        this.setState({ loading: false });
-      }
-    })
-    .catch((err) => {
-      window.alert('ERROR ADDING EXERCISE !');
-      this.setState({ loading: false });
-    })
+      })
+    }
   }
 
   handleSelectChange = (value) => {
     console.log('You\'ve selected:', value);
     this.setState({
       selectedExercises: value,
-      // program: {
-      //   ...this.state.program,
-      //   exercise_ids: value,
-      // },
      });
   }
 
   render() {
-    console.log('this.state', this.state);
     const {
       program,
       selectedExercises,

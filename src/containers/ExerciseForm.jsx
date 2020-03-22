@@ -40,15 +40,19 @@ export default class ExerciseForm extends React.Component {
 
   componentDidMount() {
     const { match } = this.props;
-    const requestParams = {
-      "exerciseId": match.params.exerciseId,
-    }
     if (match.params.exerciseId)
-      axios.get(`${API_END_POINT}/api/v1/exercise`, { params: requestParams })
+      axios.get(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`)
         .then((response) => {
           this.setState({
-            exercise: response.data.object[0],
-            description: RichTextEditor.createValueFromString(response.data.description, 'html'),
+            exercise: response.data.exercise,
+          }, () => {
+            const {exercise} = this.state;
+            if(exercise.video_urls === null) {
+              exercise.video_urls = [];
+              this.setState({ exercise })
+            } else {
+              this.setState({videoInputCount: exercise.video_urls.length })
+            }
           });
         });
   }
@@ -319,7 +323,7 @@ export default class ExerciseForm extends React.Component {
                           type="text"
                           name="video_urls"
                           className="form-control"
-                          value={exercise.video_urls[index]}
+                          value={!!exercise.video_urls ? exercise.video_urls[index] : []}
                           onChange={(event) => this.handleVideoURLChange(event, index)}
                         />
                       </div>

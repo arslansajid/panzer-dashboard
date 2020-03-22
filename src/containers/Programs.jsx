@@ -134,11 +134,11 @@ export default class Programs extends React.Component {
               </div>
             </div>
 
-            <div className="col-sm-4 pull-right mobile-space">
+            {/* <div className="col-sm-4 pull-right mobile-space">
                 <Link to="/programs/program-form">
                   <button type="button" className="btn btn-success">Add New Program</button>
                 </Link>
-            </div>
+            </div> */}
 
           </div>
           <div className="table-responsive">
