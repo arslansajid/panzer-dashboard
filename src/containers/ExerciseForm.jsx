@@ -51,7 +51,7 @@ export default class ExerciseForm extends React.Component {
               exercise.video_urls = [];
               this.setState({ exercise })
             } else {
-              this.setState({videoInputCount: exercise.video_urls.length })
+              this.setState({videoInputCount: exercise.videos_url.length })
             }
           });
         });
