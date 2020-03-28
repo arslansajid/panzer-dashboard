@@ -23,7 +23,7 @@ export default class ExerciseForm extends React.Component {
         timer_type: '',
         duration: 0,
         rest_duration: 0,
-        video_urls: []
+        video_files: []
       },
       cities: [],
       city: '',
@@ -47,8 +47,8 @@ export default class ExerciseForm extends React.Component {
             exercise: response.data.exercise,
           }, () => {
             const {exercise} = this.state;
-            if(exercise.video_urls === null) {
-              exercise.video_urls = [];
+            if(exercise.videos_url === null) {
+              exercise.video_files = [];
               this.setState({ exercise })
             } else {
               this.setState({videoInputCount: exercise.videos_url.length })
@@ -85,10 +85,9 @@ export default class ExerciseForm extends React.Component {
   }
 
   handleVideoURLChange = (event, index) => {
-    const { value, name } = event.target;
-
+    const { name } = event.target;
     const { exercise } = this.state;
-    exercise[name][index] = value;
+    exercise[name][index] = event.target.files[0];
     this.setState({ exercise });
   }
 
@@ -97,14 +96,26 @@ export default class ExerciseForm extends React.Component {
     const { match, history } = this.props;
     const { loading, exercise } = this.state;
     if (!loading) {
-      let urlObject = {};
-       exercise.video_urls.forEach((url,index) => {
-        urlObject =  Object.assign(urlObject, {[index] : url})
+      const fd = new FormData();
+
+      let videosArray = [];
+      for (let index = 0; index < exercise.video_files.length; index += 1) {
+        videosArray.push(exercise.video_files[index]);
+      }
+
+      exercise.video_files.forEach((video, index) => {
+        fd.append(`video_files[${index}]`, video);
+      });
+      delete exercise["video_files"];
+      Object.keys(exercise).forEach((eachState) => {
+        fd.append(`${eachState}`, exercise[eachState]);
       })
-      exercise.video_urls = urlObject;
+
+      
+
       this.setState({ loading: true });
       if (match.params.exerciseId) {
-        axios.put(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`, exercise)
+        axios.put(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`, fd)
           .then((response) => {
             if (response.data && response.status === 200) {
               window.alert(response.data.message);
@@ -120,7 +131,7 @@ export default class ExerciseForm extends React.Component {
           })
       }
       else {
-        axios.post(`${API_END_POINT}/api/v1/exercise`, exercise)
+        axios.post(`${API_END_POINT}/api/v1/exercise`, fd)
           .then((response) => {
             if (response.data && response.status === 200) {
               window.alert(response.data.message);
@@ -313,21 +324,33 @@ export default class ExerciseForm extends React.Component {
                   {[...Array(videoInputCount)].map((count, index) => {
                     return (
                       <div className="form-group row" key={index}>
-                      <label
-                        className="control-label col-md-3 col-sm-3"
-                      >Video URL
-                      </label>
+                      <label className="control-label col-md-3 col-sm-3">Video</label>
                       <div className="col-md-6 col-sm-6">
                         <input
-                          // required
-                          type="text"
-                          name="video_urls"
+                          type="file"
+                          accept="video/*"
+                          name="video_files"
                           className="form-control"
-                          value={!!exercise.video_urls ? exercise.video_urls[index] : []}
                           onChange={(event) => this.handleVideoURLChange(event, index)}
                         />
                       </div>
                     </div>
+                    //   <div className="form-group row" key={index}>
+                    //   <label
+                    //     className="control-label col-md-3 col-sm-3"
+                    //   >Video URL
+                    //   </label>
+                    //   <div className="col-md-6 col-sm-6">
+                    //     <input
+                    //       // required
+                    //       type="text"
+                    //       name="video_files"
+                    //       className="form-control"
+                    //       value={!!exercise.video_files ? exercise.video_files[index] : []}
+                    //       onChange={(event) => this.handleVideoURLChange(event, index)}
+                    //     />
+                    //   </div>
+                    // </div>
                     )
                   })}
                     
@@ -340,7 +363,7 @@ export default class ExerciseForm extends React.Component {
                         <Button className={`btn btn-info btn-md mr-1`} onClick={() => this.setState({ videoInputCount: videoInputCount + 1})}>
                           Add more
                         </Button>
-                        <Button className={`btn btn-danger btn-md`} onClick={() => {exercise.video_urls.pop(); this.setState({exercise, videoInputCount: videoInputCount - 1})} } disabled={videoInputCount === 1}>
+                        <Button className={`btn btn-danger btn-md`} onClick={() => {exercise.video_files.pop(); this.setState({exercise, videoInputCount: videoInputCount - 1})} } disabled={videoInputCount === 1}>
                           Remove
                         </Button>
                       </div>
