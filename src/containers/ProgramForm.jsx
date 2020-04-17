@@ -8,6 +8,14 @@ import { API_END_POINT } from '../config';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
 
+const names = [
+  'gym_3a','gym_3b','gym_3i','gym_4a','gym_4b','gym_4i','gym_5a','gym_5b','gym_5i','gym_6a','gym_6b','gym_6i','home_3a','home_3b','home_3i','home_4a','home_4b','home_4i','home_5a','home_5b','home_5i','home_6a','home_6b','home_6i' 
+]
+
+const goals = [
+  'yoga', 'warrior', 'functionFitness', 'weightLoss', 'bodyBuilding', 'powerLifting'
+]
+
 export default class ProgramForm extends React.Component {
   constructor(props) {
     super(props);
@@ -15,6 +23,7 @@ export default class ProgramForm extends React.Component {
       loading: false,
       program: {
         name: '',
+        fitness_goal: '',
         total_weeks: 0,
         exercise_ids: [],
       },
@@ -193,7 +202,7 @@ export default class ProgramForm extends React.Component {
                     className="form-horizontal form-label-left"
                     onSubmit={showExercises ? this.postExercise : this.postPogram}
                   >
-                    <div className="form-group row">
+                    {/* <div className="form-group row">
                       <label
                         className="control-label col-md-3 col-sm-3"
                       >Name
@@ -208,6 +217,50 @@ export default class ProgramForm extends React.Component {
                           onChange={this.handleInputChange}
                           readOnly={showExercises ? true : false}
                         />
+                      </div>
+                    </div> */}
+
+                    <div className="form-group row">
+                      <label className="control-label col-md-3 col-sm-3">Name</label>
+                      <div className="col-md-6 col-sm-6">
+                        <select
+                          name="name"
+                          value={program.name}
+                          className="form-control"
+                          onChange={this.handleInputChange}
+                          required
+                        >
+                          <option value="">Select Name</option>
+                          {
+                            names.map((name, index) => {
+                              return (
+                                <option key={index} value={name}>{name}</option>
+                              )
+                            })
+                          }
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="control-label col-md-3 col-sm-3">Fitness Goal</label>
+                      <div className="col-md-6 col-sm-6">
+                        <select
+                          name="fitness_goal"
+                          value={program.fitness_goal}
+                          className="form-control"
+                          onChange={this.handleInputChange}
+                          required
+                        >
+                          <option value="">Select Goal</option>
+                          {
+                            goals.map((goal, index) => {
+                              return (
+                                <option key={index} value={goal}>{goal}</option>
+                              )
+                            })
+                          }
+                        </select>
                       </div>
                     </div>
 

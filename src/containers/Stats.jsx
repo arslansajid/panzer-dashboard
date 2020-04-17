@@ -24,7 +24,7 @@ export default class Area extends React.Component {
       axios.get(`${API_END_POINT}/api/v1/exercise`)
       .then(response => {
         this.setState({
-          exercises: response.data.exercises,
+          exercises: response.data.data,
           loading: false,
           responseMessage: 'No Exercise Found'
         })
