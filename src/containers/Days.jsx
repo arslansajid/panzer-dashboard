@@ -22,7 +22,7 @@ export default class WorkoutDays extends React.Component {
   }
 
   componentWillMount() {
-    console.log("######", this.props.match.params)
+    console.log("######", this.props)
     this.fetchWorkoutDays();
   }
 
@@ -100,6 +100,7 @@ export default class WorkoutDays extends React.Component {
   }
 
   render() {
+    const fromPrograms = this.props.location.pathname.includes("programs") ? true : false;
     return (
       <div className="row animated fadeIn">
         <div className="col-12">
@@ -114,7 +115,6 @@ export default class WorkoutDays extends React.Component {
                   type="text" name="search"
                   placeholder="Enter keyword"
                   value={this.state.q}
-                  // onChange={(event) => this.setState({q: event.target.value})}
                   onChange={(event) => this.setState({q: event.target.value}, () => {
                     if(this.state.q === "") {
                       this.fetchWorkoutDays();
@@ -131,12 +131,15 @@ export default class WorkoutDays extends React.Component {
                 </span>
               </div>
             </div>
-
-            <div className="col-sm-4 pull-right mobile-space">
-                <Link to="/days/day-form">
-                  <button type="button" className="btn btn-success">Add New Day</button>
-                </Link>
-            </div>
+            {
+              !fromPrograms && (
+                <div className="col-sm-4 pull-right mobile-space">
+                  <Link to="/days/day-form">
+                    <button type="button" className="btn btn-success">Add New Day</button>
+                  </Link>
+                </div>
+              )
+            }
 
           </div>
           <div className="table-responsive">
@@ -159,16 +162,14 @@ export default class WorkoutDays extends React.Component {
                     <td style={{textTransform: "capitalize"}}>{day.name}</td>
                     <td>{day.program_id}</td>
                     <td>{day.created_at}</td>
-                    {/* <td>
-                      <Link to={`/days/exercises/${day.id}`}>
-                        <button type="button" className="btn btn-danger btn-sm">Add Exercises</button>
-                      </Link>
-                    </td> */}
+                    {
+                    !fromPrograms && (
                       <td>
                         <Link to={`/days/edit-day/${day.id}`}>
                           <span className="fa fa-edit" aria-hidden="true"></span>
                         </Link>
                       </td>
+                    )}
                       <td>
                         <span className="fa fa-trash" aria-hidden="true" style={{cursor: 'pointer'}} onClick={() => this.deleteWorkoutDays(day.id, index)}></span>
                       </td>
