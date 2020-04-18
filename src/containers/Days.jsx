@@ -131,15 +131,12 @@ export default class WorkoutDays extends React.Component {
                 </span>
               </div>
             </div>
-            {
-              !fromPrograms && (
-                <div className="col-sm-4 pull-right mobile-space">
-                  <Link to="/days/day-form">
-                    <button type="button" className="btn btn-success">Add New Day</button>
-                  </Link>
-                </div>
-              )
-            }
+
+            <div className="col-sm-4 pull-right mobile-space">
+                <Link to={fromPrograms ? `/programs/workout-days/${this.props.match.params.programId}/day-form` : "/days/day-form"}>
+                  <button type="button" className="btn btn-success">Add New Day</button>
+                </Link>
+            </div>
 
           </div>
           <div className="table-responsive">
@@ -162,14 +159,16 @@ export default class WorkoutDays extends React.Component {
                     <td style={{textTransform: "capitalize"}}>{day.name}</td>
                     <td>{day.program_id}</td>
                     <td>{day.created_at}</td>
-                    {
-                    !fromPrograms && (
+                    {/* <td>
+                      <Link to={`/days/exercises/${day.id}`}>
+                        <button type="button" className="btn btn-danger btn-sm">Add Exercises</button>
+                      </Link>
+                    </td> */}
                       <td>
-                        <Link to={`/days/edit-day/${day.id}`}>
+                        <Link to={fromPrograms ? `/programs/workout-days/${this.props.match.params.programId}/edit-day/${day.id}` : `/days/edit-day/${day.id}`}>
                           <span className="fa fa-edit" aria-hidden="true"></span>
                         </Link>
                       </td>
-                    )}
                       <td>
                         <span className="fa fa-trash" aria-hidden="true" style={{cursor: 'pointer'}} onClick={() => this.deleteWorkoutDays(day.id, index)}></span>
                       </td>

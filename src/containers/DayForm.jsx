@@ -13,7 +13,7 @@ export default class ProgramForm extends React.Component {
       loading: false,
       workoutDay: {
         name: '',
-        program_id: '',
+        program_id: this.props.match.params.programId ? this.props.match.params.programId : "",
       },
       selectedProgram: null,
       programs: [],
@@ -43,6 +43,9 @@ export default class ProgramForm extends React.Component {
             this.fetchProgramById(this.state.workoutDay.program_id)
           });
         });
+    }
+    if (match.params.programId) {
+      this.fetchProgramById(match.params.programId)
     }
   }
 
@@ -122,6 +125,7 @@ export default class ProgramForm extends React.Component {
       programs
     } = this.state;
     console.log("#######", this.state)
+    const fromProgram = this.props.match.params.programId ? true : false;
     return (
       <div className="row animated fadeIn">
         <div className="col-12">
@@ -167,6 +171,7 @@ export default class ProgramForm extends React.Component {
                         value={selectedProgram}
                         valueKey="id"
                         labelKey="name"
+                        disabled={fromProgram}
                       />
                       </div>
                     </div>

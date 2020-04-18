@@ -84,6 +84,8 @@ class App extends React.Component {
                   <Route exact={true} path="/programs/edit-program/:programId" component={ProgramForm}/>
                   <Route exact={true} path="/programs/exercises/:programId" component={ProgramForm}/>
                   <Route key={"inside-program"} exact={true} path="/programs/workout-days/:programId" component={Days}/>
+                  <Route key={"inside-program-form"} exact={true} path="/programs/workout-days/:programId/day-form" component={DayForm}/>
+                  <Route key={"inside-program-edit-form"} exact={true} path="/programs/workout-days/:programId/edit-day/:dayId" component={DayForm}/>
                   
                   <Route exact={true} path="/users" component={Users}/>
                   <Route exact={true} path='/users/user_form' component={UserForm}/>
