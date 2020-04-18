@@ -1,39 +1,38 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {Pagination} from 'react-bootstrap';
+// import {Pagination} from 'react-bootstrap';
 
 import { API_END_POINT } from '../config';
-// import Swal from 'sweetalert2'
 import Cookie from 'js-cookie';
 const token = Cookie.get('panzer_access_token');
 
-import HasRole from '../hoc/HasRole';
-
-export default class Programs extends React.Component {
+export default class WorkoutDays extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      programs: [],
+      days: [],
       activePage: 1,
       pages: 1,
       q: '',
       pageSize: 10,
-      responseMessage: 'Loading Programs...'
+      responseMessage: 'Loading Workout Days...'
     }
   }
 
   componentWillMount() {
-    this.fetchCategories();
+    console.log("######", this.props.match.params)
+    this.fetchWorkoutDays();
   }
 
-  fetchCategories = () => {
-    axios.get(`${API_END_POINT}/api/v1/program`)
+  fetchWorkoutDays = () => {
+    const {programId} = this.props.match.params;
+    axios.get(`${API_END_POINT}/api/v1/workout_days`, {params: {program_id: programId}})
     .then(response => {
       this.setState({
-        programs: response.data.program_set,
-        responseMessage: 'No Programs Found...'
+        days: response.data.data,
+        responseMessage: 'No Workout Days Found...'
       })
     })
   } 
@@ -51,24 +50,23 @@ export default class Programs extends React.Component {
     };
   }
 
-  // deleteProgram(programId, index) {
-  //   if(confirm("Are you sure you want to delete this program?")) {
-  //     axios.delete(`${API_END_POINT}/api/v1/program/${programId}`)
-  //       .then(response => {
-  //         if(response.status === 200) {
-  //           Swal.fire({
-  //             type: 'success',
-  //             title: 'Deleted...',
-  //             text: 'Program has been deleted successfully!',
-  //           })
-  //         }
+  deleteWorkoutDays(dayId, index) {
+    if(confirm("Are you sure you want to delete this workout day?")) {
+      axios.delete(`${API_END_POINT}/api/v1/workout_days/${dayId}`)
+        .then(response => {
+          if(response.status === 200 && response.data.status) {
+            window.alert(response.data.message)
+          }
           
-  //         const programs = this.state.programs.slice();
-  //         programs.splice(index, 1);
-  //         this.setState({ programs });
-  //       });
-  //   }
-  // }
+          const days = this.state.days.slice();
+          days.splice(index, 1);
+          this.setState({ days });
+        })
+        .catch((error) => {
+          window.alert("ERROR !")
+        })
+    }
+  }
 
   handleSelect(page) {
     this.setState({ activePage: page }, () => {
@@ -76,7 +74,7 @@ export default class Programs extends React.Component {
     // axios.get(`https://api.saaditrips.com/api/fetch/locations-fetch`, this.getParams())
     .then(response => {
       this.setState({
-        programs: response.data.items,
+        days: response.data.items,
         activePage: page
       })
     })
@@ -86,16 +84,16 @@ export default class Programs extends React.Component {
   handleSearch() {
     const { q } = this.state;
     if(q.length) {
-    this.setState({loading: true, programs: [], responseMessage: 'Loading Programs...'})
+    this.setState({loading: true, days: [], responseMessage: 'Loading Workout Days...'})
     // if(q === "") {
-    //   this.fetchCategories();
+    //   this.fetchWorkoutDays();
     // } else {
-      axios.get(`${API_END_POINT}/api/programs/search`, {params: {"searchWord": this.state.q}, headers: {"auth-token": token}})
+      axios.get(`${API_END_POINT}/api/days/search`, {params: {"searchWord": this.state.q}, headers: {"auth-token": token}})
       .then((response) => {
         this.setState({
-          programs: response.data.searchedItems,
+          days: response.data.searchedItems,
           loading: false,
-          responseMessage: 'No Programs Found...'
+          responseMessage: 'No Workout Days Found...'
         })
       })
     }
@@ -107,7 +105,7 @@ export default class Programs extends React.Component {
         <div className="col-12">
           <div className="row space-1">
             <div className="col-sm-4">
-              <h3>List of Programs</h3>
+              <h3>List of Workout Days</h3>
             </div>
             <div className="col-sm-4">
               <div className='input-group'>
@@ -119,7 +117,7 @@ export default class Programs extends React.Component {
                   // onChange={(event) => this.setState({q: event.target.value})}
                   onChange={(event) => this.setState({q: event.target.value}, () => {
                     if(this.state.q === "") {
-                      this.fetchCategories();
+                      this.fetchWorkoutDays();
                     }
                   })}
                   onKeyPress={(event) => {
@@ -135,8 +133,8 @@ export default class Programs extends React.Component {
             </div>
 
             <div className="col-sm-4 pull-right mobile-space">
-                <Link to="/programs/program-form">
-                  <button type="button" className="btn btn-success">Add New Program</button>
+                <Link to="/days/day-form">
+                  <button type="button" className="btn btn-success">Add New Day</button>
                 </Link>
             </div>
 
@@ -148,36 +146,32 @@ export default class Programs extends React.Component {
                   <th>Sr. #</th>
                   {/* <th>Image</th> */}
                   <th>Name</th>
-                  <th>Total Weeks</th>
+                  <th>Program Id</th>
+                  <th>Created at</th>
                 </tr>
               </thead>
               <tbody>
-                {this.state.programs && this.state.programs.length >= 1 ?
-                  this.state.programs.map((program, index) => (
+                {this.state.days && this.state.days.length >= 1 ?
+                  this.state.days.map((day, index) => (
                   <tr key={index}>
                     <td>{index + 1}</td>
-                    {/* <td>{<img style={{height: '50px', width: '50px'}} src={program.image && program.image} />}</td> */}
-                    <td style={{textTransform: "capitalize"}}>{program.name}</td>
-                    {/* <td>{program.size}</td> */}
-                    <td>{program.total_weeks}</td>
-                    <td>
-                      <Link to={`/programs/exercises/${program.id}`}>
+                    {/* <td>{<img style={{height: '50px', width: '50px'}} src={day.image && day.image} />}</td> */}
+                    <td style={{textTransform: "capitalize"}}>{day.name}</td>
+                    <td>{day.program_id}</td>
+                    <td>{day.created_at}</td>
+                    {/* <td>
+                      <Link to={`/days/exercises/${day.id}`}>
                         <button type="button" className="btn btn-danger btn-sm">Add Exercises</button>
                       </Link>
-                    </td>
-                    <td>
-                      <Link to={`/programs/workout-days/${program.id}`}>
-                        <button type="button" className="btn btn-info btn-sm">Work Out Days</button>
-                      </Link>
-                    </td>
+                    </td> */}
                       <td>
-                        <Link to={`/programs/edit-program/${program.id}`}>
+                        <Link to={`/days/edit-day/${day.id}`}>
                           <span className="fa fa-edit" aria-hidden="true"></span>
                         </Link>
                       </td>
-                      {/* <td>
-                        <span className="fa fa-trash" aria-hidden="true" style={{cursor: 'pointer'}} onClick={() => this.deleteProgram(program.id, index)}></span>
-                      </td> */}
+                      <td>
+                        <span className="fa fa-trash" aria-hidden="true" style={{cursor: 'pointer'}} onClick={() => this.deleteWorkoutDays(day.id, index)}></span>
+                      </td>
                   </tr>
                 )):
                 <tr>

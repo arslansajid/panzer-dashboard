@@ -9,9 +9,13 @@ const routes = {
   '/users/user_form': 'User Form',
   '/users/edit_user': 'Edit User',
   
-  '/special-offers': 'Special Offers',
-  '/special-offers/specialOffer_form': 'Special Offers Form',
-  '/special-offers/edit_specialOffer': 'Edit Special Offers',
+  '/programs/workout-days': 'Workout Days',
+  '/programs/workout-days/day-form': 'Workout - Day Form',
+  '/programs/workout-days/edit-day': 'Workout - Edit Day',
+
+  '/days': 'Workout Days',
+  '/days/day-form': 'Workout - Day Form',
+  '/days/edit-day': 'Workout - Edit Day',
 
   '/exercise': 'Exercise',
   '/exercise/exercise-form': 'Exercise Form',

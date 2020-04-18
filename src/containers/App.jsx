@@ -17,8 +17,8 @@ import ProgramForm from './ProgramForm';
 import Users from '../containers/Users';
 import UserForm from '../containers/UserForm';
 
-import SpecialOffers from '../containers/SpecialOffers';
-import SpecialOffersForm from '../containers/SpecialOffersForm';
+import Days from '../containers/Days';
+import DayForm from '../containers/DayForm';
 
 import Exercise from './Exercise';
 import ExerciseForm from './ExerciseForm';
@@ -83,6 +83,7 @@ class App extends React.Component {
                   <Route exact={true} path="/programs/program-form" component={ProgramForm}/>
                   <Route exact={true} path="/programs/edit-program/:programId" component={ProgramForm}/>
                   <Route exact={true} path="/programs/exercises/:programId" component={ProgramForm}/>
+                  <Route key={"inside-program"} exact={true} path="/programs/workout-days/:programId" component={Days}/>
                   
                   <Route exact={true} path="/users" component={Users}/>
                   <Route exact={true} path='/users/user_form' component={UserForm}/>
@@ -91,6 +92,10 @@ class App extends React.Component {
                   <Route exact={true} path="/exercise" component={Exercise}/>
                   <Route exact={true} path="/exercise/exercise-form" component={ExerciseForm}/>
                   <Route exact={true} path="/exercise/edit-exercise/:exerciseId" component={ExerciseForm}/>
+
+                  <Route key={"side-bar"} exact={true} path="/days" component={Days}/>
+                  <Route exact={true} path="/days/day-form" component={DayForm}/>
+                  <Route exact={true} path="/days/edit-day/:dayId" component={DayForm}/>
                   
                 </Switch>
               </Container>

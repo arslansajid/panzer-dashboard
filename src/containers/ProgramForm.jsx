@@ -60,7 +60,7 @@ export default class ProgramForm extends React.Component {
     axios.get(`${API_END_POINT}/api/v1/exercise`)
     .then(response => {
       this.setState({
-        exercises: response.data.exercises,
+        exercises: response.data.data,
       })
     })
     .catch(() => {
@@ -128,11 +128,11 @@ export default class ProgramForm extends React.Component {
       } else {
         axios.post(`${API_END_POINT}/api/v1/program`, program)
           .then((response) => {
-            if (response.data && response.status === 200) {
-              window.alert(response.data.program);
+            if (response.data && response.status === 200 && response.data.status) {
+              window.alert("SUCCESS !");
               this.setState({ loading: false });
             } else {
-              window.alert(response.data.program)
+              window.alert("ERROR !")
               this.setState({ loading: false });
             }
           })
@@ -184,6 +184,7 @@ export default class ProgramForm extends React.Component {
       exercises
     } = this.state;
     const showExercises = this.props.match.url.indexOf("exercises") > 0 ? true : false
+    const showWorkoutDays = this.props.match.url.indexOf("workout-days") > 0 ? true : false
     return (
       <div className="row animated fadeIn">
         <div className="col-12">

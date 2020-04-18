@@ -11,6 +11,11 @@ export default {
       icon: 'icon-layers',
     },
     {
+      name: 'Workout Days',
+      url: '/days',
+      icon: 'icon-fire',
+    },
+    {
       name: 'Workout (Exercise)',
       url: '/exercise',
       icon: 'icon-list',
