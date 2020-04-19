@@ -42,8 +42,11 @@ export default class ProgramForm extends React.Component {
     if (match.params.programId /* && match.url.indexOf("exercises") < 0 */) {
       axios.get(`${API_END_POINT}/api/v1/program/${match.params.programId}`)
         .then((response) => {
+          const data = response.data.program;
+          let name = data.name.split("_")[1] + "_" + data.name.split("_")[2];
+          data.name = name;
           this.setState({
-            program: response.data.program,
+            program: data,
           }, () => {
             if(match.url.indexOf("exercises") > 0 ) {
               this.fetchExercises();
@@ -183,6 +186,7 @@ export default class ProgramForm extends React.Component {
       selectedExercises,
       exercises
     } = this.state;
+    console.log("STATE:  #######", this.state);
     const showExercises = this.props.match.url.indexOf("exercises") > 0 ? true : false
     const showWorkoutDays = this.props.match.url.indexOf("workout-days") > 0 ? true : false
     return (

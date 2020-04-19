@@ -23,10 +23,11 @@ export default class ExerciseForm extends React.Component {
         timer_type: '',
         duration: 0,
         rest_duration: 0,
-        video_files: []
+        video_files: [],
+        workout_day_id: this.props.match.params.dayId ? this.props.match.params.dayId : "",
       },
-      cities: [],
-      city: '',
+      workoutDays: [],
+      workoutDay: '',
       exerciseId: '',
       profile_picture: '',
       videoInputCount: 1,
@@ -40,21 +41,56 @@ export default class ExerciseForm extends React.Component {
 
   componentDidMount() {
     const { match } = this.props;
-    if (match.params.exerciseId)
+    if (match.params.exerciseId) {
       axios.get(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`)
-        .then((response) => {
-          this.setState({
-            exercise: response.data.exercise,
-          }, () => {
-            const {exercise} = this.state;
-            if(exercise.videos_url === null) {
-              exercise.video_files = [];
-              this.setState({ exercise })
-            } else {
-              this.setState({videoInputCount: exercise.videos_url.length })
-            }
-          });
+      .then((response) => {
+        this.setState({
+          exercise: response.data.exercise,
+        }, () => {
+          const {exercise} = this.state;
+          if(exercise.videos_url === null) {
+            exercise.video_files = [];
+            this.setState({ exercise })
+          } else {
+            this.setState({videoInputCount: exercise.videos_url.length })
+          }
         });
+      });
+    }
+    if (match.params.dayId) {
+      this.getWorkoutDayById(match.params.dayId)
+    } else {
+      this.getWorkoutDays();
+    }
+  }
+
+  getWorkoutDays = () => {
+    axios.get(`${API_END_POINT}/api/v1/workout_days`)
+    .then(response => {
+      this.setState({
+        workoutDays: response.data.data,
+        responseMessage: 'No Workout Days Found...'
+      })
+    })
+  }
+
+  getWorkoutDayById = (workoutDayId) => {
+    axios.get(`${API_END_POINT}/api/v1/workout_days/${workoutDayId}`)
+    .then((response) => {
+      this.setState({
+        workoutDay: response.data.data,
+      });
+    });
+  }
+
+  setWorkoutDay(selectedWorkoutDay) {
+    this.setState(prevState => ({
+      workoutDay: selectedWorkoutDay,
+      exercise: {
+        ...prevState.exercise,
+        workout_day_id: !!selectedWorkoutDay ? selectedWorkoutDay.id : "",
+      },
+    }));
   }
 
   setCity(selectedCity) {
@@ -117,8 +153,8 @@ export default class ExerciseForm extends React.Component {
       if (match.params.exerciseId) {
         axios.put(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`, fd)
           .then((response) => {
-            if (response.data && response.status === 200) {
-              window.alert(response.data.message);
+            if (response.data && response.data.status && response.status === 200) {
+              window.alert("SUCCESS !");
               this.setState({ loading: false });
             } else {
               window.alert('ERROR UPDATING !')
@@ -133,8 +169,8 @@ export default class ExerciseForm extends React.Component {
       else {
         axios.post(`${API_END_POINT}/api/v1/exercise`, fd)
           .then((response) => {
-            if (response.data && response.status === 200) {
-              window.alert(response.data.message);
+            if (response.data && response.data.status && response.status === 200) {
+              window.alert("SUCCESS !");
               this.setState({ loading: false });
             } else {
               window.alert('ERROR SAVING !')
@@ -161,11 +197,11 @@ export default class ExerciseForm extends React.Component {
       loading,
       exercise,
       description,
-      city,
-      cities,
+      workoutDay,
+      workoutDays,
       videoInputCount
     } = this.state;
-
+    const workoutDaySelected = this.props.match.params.dayId ? true : false
     return (
       <div className="row animated fadeIn">
         <div className="col-12">
@@ -199,6 +235,22 @@ export default class ExerciseForm extends React.Component {
                           value={exercise.name}
                           onChange={this.handleInputChange}
                         />
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label className="control-label col-md-3 col-sm-3">Workout Day</label>
+                      <div className="col-md-6 col-sm-6">
+                      <Select
+                        onChange={(val) => this.setWorkoutDay(val)}
+                        options={workoutDays}
+                        placeholder="Select workout day"
+                        value={workoutDay}
+                        valueKey="id"
+                        labelKey="name"
+                        isClearable={false}
+                        disabled={workoutDaySelected}
+                      />
                       </div>
                     </div>
 

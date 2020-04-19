@@ -2,7 +2,7 @@ const routes = {
   '/': 'Home',
   '/programs': 'Programs',
   '/programs/program-form': 'Program Form',
-  '/programs/exercises': 'Add Program Exercise',
+  '/programs/workout-days/exercises': 'Add Workout Day Exercise',
   '/programs/edit-program': 'Edit Program',
 
   '/users': 'Users',
@@ -14,6 +14,7 @@ const routes = {
   '/programs/workout-days/edit-day': 'Workout - Edit Day',
 
   '/days': 'Workout Days',
+  '/days/exercises': 'Workout Days - Add Exercises',
   '/days/day-form': 'Workout - Day Form',
   '/days/edit-day': 'Workout - Edit Day',
 

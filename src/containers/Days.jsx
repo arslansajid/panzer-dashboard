@@ -159,11 +159,11 @@ export default class WorkoutDays extends React.Component {
                     <td style={{textTransform: "capitalize"}}>{day.name}</td>
                     <td>{day.program_id}</td>
                     <td>{day.created_at}</td>
-                    {/* <td>
-                      <Link to={`/days/exercises/${day.id}`}>
+                    <td>
+                      <Link to={fromPrograms ? `/programs/workout-days/exercises/${day.id}` : `/days/exercises/${day.id}`}>
                         <button type="button" className="btn btn-danger btn-sm">Add Exercises</button>
                       </Link>
-                    </td> */}
+                    </td>
                       <td>
                         <Link to={fromPrograms ? `/programs/workout-days/${this.props.match.params.programId}/edit-day/${day.id}` : `/days/edit-day/${day.id}`}>
                           <span className="fa fa-edit" aria-hidden="true"></span>

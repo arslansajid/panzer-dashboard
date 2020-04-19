@@ -16,7 +16,7 @@ export default {
       icon: 'icon-fire',
     },
     {
-      name: 'Workout (Exercise)',
+      name: 'Exercise',
       url: '/exercise',
       icon: 'icon-list',
     },

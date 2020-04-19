@@ -23,26 +23,6 @@ import DayForm from '../containers/DayForm';
 import Exercise from './Exercise';
 import ExerciseForm from './ExerciseForm';
 
-import GalleryForm from '../containers/GalleryForm';
-import Gallery from '../containers/Gallery';
-
-import BannerForm from './BannerForm';
-import Banner from './Banner';
-
-import OrderForm from '../containers/OrderForm';
-import Orders from '../containers/Orders';
-
-import Items from './Items';
-import ItemsForm from './ItemsForm';
-
-import Brands from './Brands';
-import BrandForm from './BrandForm';
-
-import Properties from './Properties';
-import PropertyForm from './PropertyForm';
-
-import { API_END_POINT } from "../config";
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -82,7 +62,8 @@ class App extends React.Component {
                   <Route exact={true} path="/programs" component={Programs}/>
                   <Route exact={true} path="/programs/program-form" component={ProgramForm}/>
                   <Route exact={true} path="/programs/edit-program/:programId" component={ProgramForm}/>
-                  <Route exact={true} path="/programs/exercises/:programId" component={ProgramForm}/>
+                  <Route exact={true} path="/programs/workout-days/exercises/:dayId" component={ExerciseForm}/>
+
                   <Route key={"inside-program"} exact={true} path="/programs/workout-days/:programId" component={Days}/>
                   <Route key={"inside-program-form"} exact={true} path="/programs/workout-days/:programId/day-form" component={DayForm}/>
                   <Route key={"inside-program-edit-form"} exact={true} path="/programs/workout-days/:programId/edit-day/:dayId" component={DayForm}/>
@@ -98,6 +79,7 @@ class App extends React.Component {
                   <Route key={"side-bar"} exact={true} path="/days" component={Days}/>
                   <Route exact={true} path="/days/day-form" component={DayForm}/>
                   <Route exact={true} path="/days/edit-day/:dayId" component={DayForm}/>
+                  <Route exact={true} path="/days/exercises/:dayId" component={ExerciseForm}/>
                   
                 </Switch>
               </Container>

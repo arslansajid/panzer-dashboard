@@ -161,11 +161,6 @@ export default class Programs extends React.Component {
                     {/* <td>{program.size}</td> */}
                     <td>{program.total_weeks}</td>
                     <td>
-                      <Link to={`/programs/exercises/${program.id}`}>
-                        <button type="button" className="btn btn-danger btn-sm">Add Exercises</button>
-                      </Link>
-                    </td>
-                    <td>
                       <Link to={`/programs/workout-days/${program.id}`}>
                         <button type="button" className="btn btn-info btn-sm">Work Out Days</button>
                       </Link>
