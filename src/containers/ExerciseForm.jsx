@@ -23,6 +23,7 @@ export default class ExerciseForm extends React.Component {
         timer_type: '',
         duration: 0,
         rest_duration: 0,
+        position: 0,
         video_files: [],
         workout_day_id: this.props.match.params.dayId ? this.props.match.params.dayId : "",
       },
@@ -251,6 +252,23 @@ export default class ExerciseForm extends React.Component {
                         isClearable={false}
                         disabled={workoutDaySelected}
                       />
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label
+                        className="control-label col-md-3 col-sm-3"
+                      >Position
+                      </label>
+                      <div className="col-md-6 col-sm-6">
+                        <input
+                          required
+                          type="number"
+                          name="position"
+                          className="form-control"
+                          value={exercise.position}
+                          onChange={this.handleInputChange}
+                        />
                       </div>
                     </div>
 

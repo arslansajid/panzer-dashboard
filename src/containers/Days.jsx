@@ -146,7 +146,9 @@ export default class WorkoutDays extends React.Component {
                   <th>Sr. #</th>
                   {/* <th>Image</th> */}
                   <th>Name</th>
+                  <th>Program</th>
                   <th>Program Id</th>
+                  <th>Position</th>
                   <th>Created at</th>
                 </tr>
               </thead>
@@ -157,7 +159,9 @@ export default class WorkoutDays extends React.Component {
                     <td>{index + 1}</td>
                     {/* <td>{<img style={{height: '50px', width: '50px'}} src={day.image && day.image} />}</td> */}
                     <td style={{textTransform: "capitalize"}}>{day.name}</td>
+                    <td>{day.program_name}</td>
                     <td>{day.program_id}</td>
+                    <td>{day.position}</td>
                     <td>{day.created_at}</td>
                     <td>
                       <Link to={fromPrograms ? `/programs/workout-days/exercises/${day.id}` : `/days/exercises/${day.id}`}>

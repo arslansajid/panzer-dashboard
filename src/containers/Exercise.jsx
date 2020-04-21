@@ -139,6 +139,9 @@ export default class Exercise extends React.Component {
                   <th>Sr. #</th>
                   {/* <th>Picture</th> */}
                   <th>Name</th>
+                  <th>Program</th>
+                  <th>Day</th>
+                  <th>Position</th>
                   <th>Total Days</th>
                   <th>Sets</th>
                   <th>Reps</th>
@@ -156,6 +159,9 @@ export default class Exercise extends React.Component {
                   <tr key={index}>
                   <td>{index + 1}</td>
                   <td style={{textTransform: "capitalize"}}>{exercise.name}</td>
+                  <td style={{textTransform: "capitalize"}}>{exercise.program_name}</td>
+                  <td style={{textTransform: "capitalize"}}>{exercise.day_name}</td>
+                  <td style={{textTransform: "capitalize"}}>{exercise.position}</td>
                   {/* <td>{<img style={{height: '50px', width: '50px'}} src={exercise.image && exercise.image}/>}</td> */}
                   <td>{exercise.total_days}</td>
                   <td>{exercise.sets}</td>

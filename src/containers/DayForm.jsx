@@ -14,6 +14,7 @@ export default class ProgramForm extends React.Component {
       workoutDay: {
         name: '',
         program_id: this.props.match.params.programId ? this.props.match.params.programId : "",
+        position: 0,
       },
       selectedProgram: null,
       programs: [],
@@ -173,6 +174,23 @@ export default class ProgramForm extends React.Component {
                         labelKey="name"
                         disabled={fromProgram}
                       />
+                      </div>
+                    </div>
+
+                    <div className="form-group row">
+                      <label
+                        className="control-label col-md-3 col-sm-3"
+                      >Position
+                      </label>
+                      <div className="col-md-6 col-sm-6">
+                        <input
+                          required
+                          type="number"
+                          name="position"
+                          className="form-control"
+                          value={workoutDay.position}
+                          onChange={this.handleInputChange}
+                        />
                       </div>
                     </div>
 
