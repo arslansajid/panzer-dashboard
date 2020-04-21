@@ -137,7 +137,6 @@ export default class Exercise extends React.Component {
               <thead>
                 <tr>
                   <th>Sr. #</th>
-                  {/* <th>Picture</th> */}
                   <th>Name</th>
                   <th>Program</th>
                   <th>Day</th>
@@ -149,7 +148,6 @@ export default class Exercise extends React.Component {
                   <th>Timer_type</th>
                   <th>Duration</th>
                   <th>Rest Duration</th>
-                  <th>Total Days</th>
                   <th>Video Urls</th>
                 </tr>
               </thead>
@@ -162,14 +160,12 @@ export default class Exercise extends React.Component {
                   <td style={{textTransform: "capitalize"}}>{exercise.program_name}</td>
                   <td style={{textTransform: "capitalize"}}>{exercise.day_name}</td>
                   <td style={{textTransform: "capitalize"}}>{exercise.position}</td>
-                  {/* <td>{<img style={{height: '50px', width: '50px'}} src={exercise.image && exercise.image}/>}</td> */}
                   <td>{exercise.total_days}</td>
                   <td>{exercise.sets}</td>
                   <td>{exercise.reps}</td>
                   <td>{exercise.intensity}</td>
                   <td>{exercise.timer_type ? exercise.timer_type : "-"}</td>
                   <td>{exercise.duration ? exercise.duration : "-"}</td>
-                  <td>{exercise.timer_type ? exercise.timer_type : "-"}</td>
                   <td>{exercise.rest_duration ? exercise.rest_duration : "-"}</td>
                   <td>{exercise.video_urls ? exercise.video_urls.length : "-"}</td>
                   <td>
