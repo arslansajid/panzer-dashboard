@@ -45,10 +45,13 @@ export default class ExerciseForm extends React.Component {
     if (match.params.exerciseId) {
       axios.get(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`)
       .then((response) => {
+        let data  = response.data.exercise;
+        data["video_files"] = [];
         this.setState({
-          exercise: response.data.exercise,
+          exercise: data,
         }, () => {
           const {exercise} = this.state;
+          this.getWorkoutDayById(exercise.workout_day_id);
           if(exercise.videos_url === null) {
             exercise.video_files = [];
             this.setState({ exercise })
@@ -135,15 +138,17 @@ export default class ExerciseForm extends React.Component {
     if (!loading) {
       const fd = new FormData();
 
-      let videosArray = [];
-      for (let index = 0; index < exercise.video_files.length; index += 1) {
-        videosArray.push(exercise.video_files[index]);
+      // let videosArray = [];
+      // for (let index = 0; index < exercise.video_files.length; index += 1) {
+      //   videosArray.push(exercise.video_files[index]);
+      // }
+      if(!!exercise.video_files && exercise.video_files.length > 0) {
+        exercise.video_files.forEach((video, index) => {
+          fd.append(`video_files[${index}]`, video);
+        });
+        delete exercise["video_files"];
       }
 
-      exercise.video_files.forEach((video, index) => {
-        fd.append(`video_files[${index}]`, video);
-      });
-      delete exercise["video_files"];
       Object.keys(exercise).forEach((eachState) => {
         fd.append(`${eachState}`, exercise[eachState]);
       })
@@ -155,7 +160,7 @@ export default class ExerciseForm extends React.Component {
         axios.put(`${API_END_POINT}/api/v1/exercise/${match.params.exerciseId}`, fd)
           .then((response) => {
             if (response.data && response.data.status && response.status === 200) {
-              window.alert("SUCCESS !");
+              window.alert("Updated !");
               this.setState({ loading: false });
             } else {
               window.alert('ERROR UPDATING !')

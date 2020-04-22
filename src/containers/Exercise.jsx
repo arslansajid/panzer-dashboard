@@ -167,7 +167,7 @@ export default class Exercise extends React.Component {
                   <td>{exercise.timer_type ? exercise.timer_type : "-"}</td>
                   <td>{exercise.duration ? exercise.duration : "-"}</td>
                   <td>{exercise.rest_duration ? exercise.rest_duration : "-"}</td>
-                  <td>{exercise.video_urls ? exercise.video_urls.length : "-"}</td>
+                  <td>{exercise.videos_url ? exercise.videos_url.length : "-"}</td>
                   <td>
                     <Link to={`/exercise/edit-exercise/${exercise.id}`}>
                       <span className="fa fa-edit" aria-hidden="true"></span>
